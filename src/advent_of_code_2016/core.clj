@@ -1,7 +1,7 @@
 (ns advent-of-code-2016.core
-  (:require [advent-of-code-2016.day01 :as day1])
+  (:require [advent-of-code-2016.day02 :as day2])
   (:gen-class))
 
 (defn -main []
-  (println day1/part1)
-  (println day1/part2))
+  (println day2/part1)
+  (println day2/part2))
