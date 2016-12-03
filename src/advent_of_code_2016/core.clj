@@ -3,4 +3,5 @@
   (:gen-class))
 
 (defn -main []
-  (println day1/part1))
+  (println day1/part1)
+  (println day1/part2))
