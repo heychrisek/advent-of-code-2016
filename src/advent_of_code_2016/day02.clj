@@ -1,7 +1,8 @@
-(ns advent-of-code-2016.day02)
+(ns advent-of-code-2016.day02
+  (:require [clojure.string :as str]))
 
 (defn get-input []
-  (doall (clojure.string/split-lines (slurp "resources/day02/input"))))
+  (doall (str/split-lines (slurp "resources/day02/input"))))
 
 (def instructions (get-input))
 

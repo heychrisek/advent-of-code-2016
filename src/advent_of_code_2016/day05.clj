@@ -1,18 +1,21 @@
 ; this solution is really slow
   
-(ns advent-of-code-2016.day05)
+(ns advent-of-code-2016.day05
+  (:import (java.security MessageDigest)
+            (java.math BigInteger)))
 
 (defn get-input []
   (slurp "resources/day05/input"))
 
 (def input (get-input))
 
+(def hasher (MessageDigest/getInstance "MD5"))
+
 ; https://gist.github.com/jizhang/4325757
 (defn md5 [s]
-  (let [algorithm (java.security.MessageDigest/getInstance "MD5")
-        size (* 2 (.getDigestLength algorithm))
-        raw (.digest algorithm (.getBytes s))
-        sig (.toString (java.math.BigInteger. 1 raw) 16)
+  (let [size (* 2 (.getDigestLength hasher))
+        raw (.digest hasher (.getBytes s))
+        sig (.toString (BigInteger. 1 raw) 16)
         padding (apply str (repeat (- size (count sig)) "0"))]
     (str padding sig)))
 

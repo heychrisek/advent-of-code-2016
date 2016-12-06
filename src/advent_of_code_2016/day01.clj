@@ -1,4 +1,5 @@
-(ns advent-of-code-2016.day01)
+(ns advent-of-code-2016.day01
+  (:require [clojure.string :as str]))
 
 ;   2   _  _  _  _  _ 
 ;   1   _  _  _  _  _ 
@@ -10,7 +11,7 @@
 ; right and taking one step takes it to [1 2].
 
 (defn get-input []
-  (clojure.string/split (slurp "resources/day01/input") #", "))
+  (str/split (slurp "resources/day01/input") #", "))
 
 (def instructions (get-input))
 

@@ -1,7 +1,8 @@
-(ns advent-of-code-2016.day04)
+(ns advent-of-code-2016.day04
+  (:require [clojure.string :as str]))
 
 (defn get-input []
-  (doall (clojure.string/split-lines (slurp "resources/day04/input"))))
+  (doall (str/split-lines (slurp "resources/day04/input"))))
 
 (defn sanitize-input [input]
   (map
@@ -15,18 +16,25 @@
 (def input (sanitize-input (get-input)))
 
 (defn checksum-from-encrypted-name [encrypted-name]
-  (clojure.string/join (map #(key %) (take 5 (sort-by val #(> %1 %2) (sort-by key (frequencies (filter #(Character/isLetter %) encrypted-name))))))))
+  (->> (seq encrypted-name)
+       (filter #(Character/isLetter %))
+       frequencies
+       (sort-by key)
+       (sort-by val >)
+       (map first)
+       (take 5)
+       str/join))
 
-(defn real-room? [line]
-  (let [encrypted-name (first line)
-        checksum (last line)]
-    (= (checksum-from-encrypted-name encrypted-name) checksum)))
+(defn real-room? [[encrypted-name _ checksum]]
+  (= (checksum-from-encrypted-name encrypted-name) checksum))
 
 (defn real-rooms [lines]
-  (filter #(real-room? %) lines))
+  (filter real-room? lines))
 
 (defn sum-sector-ids [rooms]
-  (reduce (fn [acc el] (+ acc (read-string (second el)))) 0 rooms))
+  (->> rooms
+      (map (fn [[_ x _]] (Integer/parseInt x)))
+      (reduce +)))
 
 (defn shift-char [letter]
   (let [code (int letter)]
@@ -41,13 +49,13 @@
 
 (defn decrypt-name [name n]
   (let [n-shifts (mod n 26)] ; (mod n 26) avoids needlessly going through alphabet multiple times 
-    (clojure.string/join (map #(shift-char-n-times % n-shifts) name))))
+    (str/join (map #(shift-char-n-times % n-shifts) name))))
 
 (defn decrypt-lines [lines]
   (map #(assoc % 0 (decrypt-name (first %) (read-string (second %)))) lines))
 
 (defn includes-north-pole? [lines]
-  (filter #(re-find #"northpole" (first %)) lines))
+  (filter #(re-find #"^northpole" (first %)) lines))
 
 (def part1 (sum-sector-ids (real-rooms input)))
 (def part2 (includes-north-pole? (decrypt-lines (real-rooms input))))
